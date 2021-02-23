@@ -18,7 +18,7 @@ def get_dashboard(request: Request):
 
 
 @router.post("/stock")
-def create_stock(stock_request: StockRequest, db: Session=Depends(get_database_connection)):
+def create_stock(stock_request: StockRequest, db: Session = Depends(get_database_connection)):
     """
     Endpoint to create a now stock to track
     """
