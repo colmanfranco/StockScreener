@@ -11,6 +11,6 @@ Base = declarative_base()
 def get_database_connection():
     try:
         db = SessionLocal()
-        yield db
+        return db
     finally:
         db.close()

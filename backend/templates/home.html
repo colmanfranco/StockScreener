@@ -1,53 +1,113 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script>
+  $(document).ready(function() {
+    $("#add_ticker").click(function() {
+      $('.ui.modal').modal('show');
+    });
 
-<div class="ui input">
-  <input type="text" placeholder="P/E Ratio">
-</div>
+    $("#save_tickers").click(function() {
+      let tickers = $("#ticker").val();
+      let tickersArray = tickers.split("\n");
+      tickersArray.forEach(function(ticker) {
+        $.ajax({
+          url: '/api/v1/stock',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({"ticker": ticker}),
+          dataType: 'json',
+        })
+      });
+      $('.ui.modal').modal('show');
+    })
+  });
+</script>
 
-<div class="ui input">
-  <input type="text" placeholder="Dividend Yield">
-</div>
+<form>
+  <div class="ui input">
+    <input name="forward_pe" type="text" placeholder="P/E Ratio">
+  </div>
 
-<div class="ui checkbox">
-  <input type="checkbox" name="example">
-  <label>Above 50 day MA</label>
-</div>
+  <div class="ui input">
+    <input name="forward_eps" type="text" placeholder="Dividend Yield">
+  </div>
 
-<div class="ui checkbox">
-  <input type="checkbox" name="example">
-  <label>Above 200 day MA</label>
-</div>
+  <div class="ui checkbox">
+    <input name="moving_average_50" type="checkbox">
+    <label>Above 50 day MA</label>
+  </div>
 
-<button class="ui button primary">
-  Follow
-</button>
+  <div class="ui checkbox">
+    <input name="moving_average_200" type="checkbox">
+    <label>Above 200 day MA</label>
+  </div>
+
+  <button class="ui button primary">
+    Filter
+  </button>
+</form>
 
 <table class="ui celled table">
   <thead>
     <tr>
         <th>Ticker</th>
-        <th>P/E</th>
+        <th>Price</th>
+        <th>Forward P/E</th>
+        <th>Forward EPS</th>
         <th>Dividend Yield</th>
+        <th>Moving Avg. 50/days</th>
+        <th>Moving Avg. 200/days</th>
     </tr>
   </thead>
   <tbody>
+    {% for stock in stocks %}
     <tr>
-      <td data-label="Name">James</td>
-      <td data-label="Age">24</td>
-      <td data-label="Job">Engineer</td>
+      <td>{{ stock.ticker}}</td>
+      <td>{{ stock.price }}</td>
+      <td>{{ stock.forward_pe }}</td>
+      <td>{{ stock.forward_eps }}</td>
+      <td>{{ stock.dividend_yield }}</td>
+      <td>{{ stock.moving_average_50 }}</td>
+      <td>{{ stock.moving_average_200 }}</td>
+      <td>
+        <button class="ui button primary">
+          Edit
+        </button>
+      </td><td>
+        <button class="ui red button">
+          Delete
+        </button>
+      </td>
     </tr>
-    <tr>
-      <td data-label="Name">Jill</td>
-      <td data-label="Age">26</td>
-      <td data-label="Job">Engineer</td>
-    </tr>
-    <tr>
-      <td data-label="Name">Elyse</td>
-      <td data-label="Age">24</td>
-      <td data-label="Job">Designer</td>
-    </tr>
+    {% endfor %}
   </tbody>
 </table>
+
+<div>
+  <button id="add_ticker" class="ui button primary">
+    Add Tickers
+  </button>
+</div>
+
+<div class="ui modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Add New Tickers
+  </div>
+  <div class="content">
+    <div class="ui form">
+      <div class="field">
+        <label>Text</label>
+        <textarea id="ticker"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <div id="save_tickers" class="ui positive right labeled icon button">
+      Add Tickers
+      <i class="plus icon"></i>
+    </div>
+  </div>
+</div>
 {% endblock %}
