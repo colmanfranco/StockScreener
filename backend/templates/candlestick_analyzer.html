@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Trading App</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    </head>
+    <body>
+        <h1>Candlestick Pattern Recognition</h1>
+        <form>
+            <select name="pattern" class="ui dropdown" >
+                <option value="">Select a Pattern</option>
+                {% for pattern in patterns %}
+                    <option value="{{ pattern }}">{{ patterns[pattern] }}</option>
+                {% endfor %}
+            </select>
+            <input class="ui button primary" type="submit" value="Scan" />
+        </form>
+    </body>
+</html>
